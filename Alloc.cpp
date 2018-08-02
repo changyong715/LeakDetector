@@ -1,9 +1,9 @@
 #include"Alloc.h"
 
-//³õÊ¼»¯¾²Ì¬±äÁ¿
+//åˆå§‹åŒ–é™æ€å˜é‡
 int Inspect::count = 0;
 
-//¶¨ÒåÒì³£Àà£¬½â¾ödeleteµÄ·Ç·¨²Ù×÷
+//å®šä¹‰å¼‚å¸¸ç±»ï¼Œè§£å†³deleteçš„éæ³•æ“ä½œ
 class Exception {
 public:
 	Exception(int errid,const char* errmsg)
@@ -19,38 +19,38 @@ public:
 		return _errId;
 	}
 private:
-	int _errId;//´íÎóÂë
-	const char* _errMsg;//´íÎóÏûÏ¢
+	int _errId;//é”™è¯¯ç 
+	const char* _errMsg;//é”™è¯¯æ¶ˆæ¯
 };
 
-//Ñ¡ÓÃË«ÏòÁ´±í¹ÜÀí·ÖÅäµÄÄÚ´æ
+//é€‰ç”¨åŒå‘é“¾è¡¨ç®¡ç†åˆ†é…çš„å†…å­˜
 typedef struct List {
 	List* _next;
 	List* _prev;
-	int _size;  //ÉêÇëµÄÄÚ´æ¿Õ¼ä´óĞ¡
-	bool _IsNotArr;  //ÅĞ¶ÏÊÇoperator new»¹ÊÇoperator new[]£¬ÊÇÊı×éÖÃÎªfalse
+	int _size;  //ç”³è¯·çš„å†…å­˜ç©ºé—´å¤§å°
+	bool _IsNotArr;  //åˆ¤æ–­æ˜¯operator newè¿˜æ˜¯operator new[]ï¼Œæ˜¯æ•°ç»„ç½®ä¸ºfalse
 	
-	//³õÊ¼»¯£¬²ÉÓÃÈ«È±Ê¡,±ÜÃâ´«²Î³ö´í
+	//åˆå§‹åŒ–ï¼Œé‡‡ç”¨å…¨ç¼ºçœ,é¿å…ä¼ å‚å‡ºé”™
 	List(List* next=NULL,List* _prev=NULL,int size=0,bool isnotarr=true)
 		:_next(next)
 		, _prev(_prev)
 		,_size(size)
-		,_IsNotArr(isnotarr) //Ä¬ÈÏÊÇoperator new
+		,_IsNotArr(isnotarr) //é»˜è®¤æ˜¯operator new
 	{}
 
 }List;
 
-//¶¨ÒåÍ·½Úµã
+//å®šä¹‰å¤´èŠ‚ç‚¹
 static List phead = {&phead,&phead,0};
 
-//Î´ÊÍ·ÅµÄ¿Õ¼ä´óĞ¡
+//æœªé‡Šæ”¾çš„ç©ºé—´å¤§å°
 static int SurplusMemory = 0;
 
-//¾²Ì¬¶ÔÏóµÄÎö¹¹µ÷ÓÃReleaseMemoryº¯Êı£¬
-//ReleaseMemoryº¯Êıµ÷ÓÃDelete(),ÅĞ¶ÏÊÇ·ñÄÚ´æĞ¹Â©
+//é™æ€å¯¹è±¡çš„ææ„è°ƒç”¨ReleaseMemoryå‡½æ•°ï¼Œ
+//ReleaseMemoryå‡½æ•°è°ƒç”¨Delete(),åˆ¤æ–­æ˜¯å¦å†…å­˜æ³„æ¼
 void Inspect::ReleaseMemory()
 {
-	//ÊÇ·ñÄÚ´æĞ¹Â©£¬ÅĞ¶ÏSurplusMemoryÊÇ·ñÎª0¼´¿É
+	//æ˜¯å¦å†…å­˜æ³„æ¼ï¼Œåˆ¤æ–­SurplusMemoryæ˜¯å¦ä¸º0å³å¯
 	if (0 == SurplusMemory)
 	{
 		printf("Memory not reveal!\n");
@@ -58,48 +58,48 @@ void Inspect::ReleaseMemory()
 	}
 	else
 	{
-		int count = 0;//Í³¼ÆĞ¹Â©´ÎÊı£¬¼´Á´±íÖĞÓĞ¼¸¸ö½Úµã¾Í´ú±íÓĞ¼¸´ÎĞ¹Â©
-		//±éÀúÁ´±íÅĞ¶Ï
+		int count = 0;//ç»Ÿè®¡æ³„æ¼æ¬¡æ•°ï¼Œå³é“¾è¡¨ä¸­æœ‰å‡ ä¸ªèŠ‚ç‚¹å°±ä»£è¡¨æœ‰å‡ æ¬¡æ³„æ¼
+		//éå†é“¾è¡¨åˆ¤æ–­
 		List* cur = phead._next;
 		while (cur != NULL && cur!=&phead)
 		{
-			//ÅĞ¶ÏÊÇnewĞ¹Â©»¹ÊÇnew []Ğ¹Â©£¬Í¨¹ı_IsNotArrÅĞ¶Ï
+			//åˆ¤æ–­æ˜¯newæ³„æ¼è¿˜æ˜¯new []æ³„æ¼ï¼Œé€šè¿‡_IsNotArråˆ¤æ–­
 			if (true == cur->_IsNotArr)
-				printf("new¿Õ¼äÎ´ÊÍ·Å£¬");
+				printf("newç©ºé—´æœªé‡Šæ”¾ï¼Œ");
 			else
-				printf("new[]¿Õ¼äÎ´ÊÍ·Å£¬");
-			printf("¶ÔÓ¦Ö¸Õë->0x%x£¬Ğ¹Â©µÄ´óĞ¡ÊÇ%dbyte\n", cur, cur->_size);
+				printf("new[]ç©ºé—´æœªé‡Šæ”¾ï¼Œ");
+			printf("å¯¹åº”æŒ‡é’ˆ->0x%xï¼Œæ³„æ¼çš„å¤§å°æ˜¯%dbyte\n", cur, cur->_size);
 			cur = cur->_next;
 			++count;
 		}
-		printf("×Ü¹²Ğ¹Â¶ÁË%d´¦£¬×Ü¼Æ´óĞ¡ÊÇ%dbyte\n", count, SurplusMemory);
+		printf("æ€»å…±æ³„éœ²äº†%då¤„ï¼Œæ€»è®¡å¤§å°æ˜¯%dbyte\n", count, SurplusMemory);
 	}
 }
 
-//·ÖÅäÄÚ´æ£¬ÓÃÁ´±í¹ÜÀí£¬Í·²å
+//åˆ†é…å†…å­˜ï¼Œç”¨é“¾è¡¨ç®¡ç†ï¼Œå¤´æ’
 void* AllocMemory(size_t size,bool isnotarr=true)
 {
-	//¹ÜÀí·ÖÅäµÄÁ´±í½á¹¹
-	size_t newsize = size + sizeof(List);//²åÈë½ÚµãµÄ´óĞ¡£¬°üÀ¨Í·½áµã´óĞ¡
+	//ç®¡ç†åˆ†é…çš„é“¾è¡¨ç»“æ„
+	size_t newsize = size + sizeof(List);//æ’å…¥èŠ‚ç‚¹çš„å¤§å°ï¼ŒåŒ…æ‹¬å¤´ç»“ç‚¹å¤§å°
 
-	//×ªÎªList*£¬·½±ã²Ù×÷¹ÜÀí
+	//è½¬ä¸ºList*ï¼Œæ–¹ä¾¿æ“ä½œç®¡ç†
 	List* node = (List*)malloc(newsize);
 
-	//²åÈë½Úµã
-	node->_prev = &phead;//Á´½ÓÍ·½áµã
+	//æ’å…¥èŠ‚ç‚¹
+	node->_prev = &phead;//é“¾æ¥å¤´ç»“ç‚¹
 	node->_next = phead._next;
 
-	node->_size = size;//·ÖÅäµÄÄÚ´æ´óĞ¡
-	node->_IsNotArr = isnotarr;//ÅĞ¶ÏÊÇ·ñÎªoperator new[]
+	node->_size = size;//åˆ†é…çš„å†…å­˜å¤§å°
+	node->_IsNotArr = isnotarr;//åˆ¤æ–­æ˜¯å¦ä¸ºoperator new[]
 
 	phead._next->_prev = node;
 	phead._next = node;
 
-	//¸üĞÂÒÑ¾­·ÖÅäµÄÄÚ´æ´óĞ¡
+	//æ›´æ–°å·²ç»åˆ†é…çš„å†…å­˜å¤§å°
 	SurplusMemory += size;
 
-	//·µ»ØnewµÄ¿Õ¼ä
-	return (char*)node - sizeof(List);  //Òª¼õÈ¥Í·½áµã´óĞ¡£¬²ÅÊÇnewÊµ¼ÊÉêÇëµÄ¿Õ¼ä´óĞ¡
+	//è¿”å›newçš„ç©ºé—´
+	return (char*)node - sizeof(List);  //è¦å‡å»å¤´ç»“ç‚¹å¤§å°ï¼Œæ‰æ˜¯newå®é™…ç”³è¯·çš„ç©ºé—´å¤§å°
 }
 
 bool Find(void* ptr)
@@ -107,7 +107,7 @@ bool Find(void* ptr)
 	List* cur = phead._next;
 	if (NULL == cur)
 		return false;
-	//µÃµ½ÕıÈ·µÄ½ÚµãÎ»ÖÃ£¬¼´Í·½áµã´óĞ¡+ptr´óĞ¡
+	//å¾—åˆ°æ­£ç¡®çš„èŠ‚ç‚¹ä½ç½®ï¼Œå³å¤´ç»“ç‚¹å¤§å°+ptrå¤§å°
 	List* ret = (List*)((char*)ptr+sizeof(List));
 	while (cur != NULL && cur != &phead)
 	{
@@ -118,24 +118,20 @@ bool Find(void* ptr)
 	return false;
 }
 
-//delete£¬¼´É¾³ıË«ÏòÁ´±íµÄÒ»¸öÒ»¸ö½Úµã£¬ËùÒÔĞèÒªÕÒµ½¶ÔÓ¦µÄ½Úµã
+//deleteï¼Œå³åˆ é™¤åŒå‘é“¾è¡¨çš„ä¸€ä¸ªä¸€ä¸ªèŠ‚ç‚¹ï¼Œæ‰€ä»¥éœ€è¦æ‰¾åˆ°å¯¹åº”çš„èŠ‚ç‚¹
 void Delete(void* ptr, bool isnotarr=true)
 {
-	//¶Ñ¿Õ¼ä×Ôµ×ÏòÉÏÔö³¤£¬¼õÈ¥Í·½áµã½áÎ²¶ÔÓ¦Î»ÖÃ
+	//å †ç©ºé—´è‡ªåº•å‘ä¸Šå¢é•¿ï¼Œå‡å»å¤´ç»“ç‚¹ç»“å°¾å¯¹åº”ä½ç½®
 	List* del = (List*)((char*)ptr+sizeof(List));
 
-	if (Find(ptr) == false)//±ÜÃâÊÍ·Å¿ÕÖ¸Õë£¬¼´¶à´ÎÊÍ·ÅÎÊÌâ
-		throw Exception(1,"¶à´ÎÊÍ·Å´íÎó");
+	if (Find(ptr) == false)//é¿å…é‡Šæ”¾ç©ºæŒ‡é’ˆï¼Œå³å¤šæ¬¡é‡Šæ”¾é—®é¢˜
+		throw Exception(1,"å¤šæ¬¡é‡Šæ”¾é”™è¯¯");
 
-	//×¢Òânew deleteºÍnew [] delete[] Æ¥ÅäÊ¹ÓÃ
+	//æ³¨æ„new deleteå’Œnew [] delete[] åŒ¹é…ä½¿ç”¨
 	if (del->_IsNotArr != isnotarr)
-	{
-		/*printf("new/delete new[]/delete[]Î´Æ¥ÅäÊ¹ÓÃ\n");
-		return;*/
-		throw Exception(2,"Î´Æ¥ÅäÊ¹ÓÃ");
-	}
+		throw Exception(2,"æœªåŒ¹é…ä½¿ç”¨");
 
-	//É¾³ı½Úµã£¬×ªÎªË«ÏòÁ´±íÉ¾³ı½ÚµãÎÊÌâ
+	//åˆ é™¤èŠ‚ç‚¹ï¼Œè½¬ä¸ºåŒå‘é“¾è¡¨åˆ é™¤èŠ‚ç‚¹é—®é¢˜
 	List* next = del->_next;
 	List* prev = del->_prev;
 	if (NULL == next)
@@ -147,40 +143,40 @@ void Delete(void* ptr, bool isnotarr=true)
 	next->_prev = prev;
 	prev->_next = next;
 
-	//ÊÍ·Å¶ÔÓ¦¿Õ¼ä´óĞ¡£¬²¢ÇÒ¼õÈ¥ÏàÓ¦µÄSurplusMemory
+	//é‡Šæ”¾å¯¹åº”ç©ºé—´å¤§å°ï¼Œå¹¶ä¸”å‡å»ç›¸åº”çš„SurplusMemory
 	SurplusMemory -= del->_size;
 end:
 	free(del);
 	del = NULL;
 }
 
-//ÖØÔØoperator new 
+//é‡è½½operator new 
 void* operator new(size_t size)
 {
-	//µ÷ÓÃÁ´±í¹ÜÀí
+	//è°ƒç”¨é“¾è¡¨ç®¡ç†
 	return AllocMemory(size);
 }
 
-//ÖØÔØoperator new[]
+//é‡è½½operator new[]
 void* operator new[](size_t size)
 {
 	return AllocMemory(size, false);
 }
 
-//ÖØÔØdelete
+//é‡è½½delete
 void operator delete(void* ptr)
 {
-	//µ÷ÓÃÁ´±íÉ¾³ı
+	//è°ƒç”¨é“¾è¡¨åˆ é™¤
 	try {
 		Delete(ptr);
 	}
 	catch (const Exception& w)
 	{
-		printf("´íÎóÂë:%d  %s\n", w.ID(),w.What());
+		printf("é”™è¯¯ç :%d  %s\n", w.ID(),w.What());
 	}
 }
 
-//ÖØÔØdelete []
+//é‡è½½delete []
 void operator delete[](void* ptr)
 {
 	try {
@@ -188,6 +184,6 @@ void operator delete[](void* ptr)
 	}
 	catch (const Exception& w)
 	{
-		printf("´íÎóÂë:%d  %s\n",w.ID(), w.What());
+		printf("é”™è¯¯ç :%d  %s\n",w.ID(), w.What());
 	}
 }
